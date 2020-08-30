@@ -18,8 +18,8 @@ func consumirCarros(sentido string, fila chan int, ponte *sync.Mutex) {
 			hasLock = false
 		}()
 		for hasLock {
-			if n, ok := <-fila; ok {
-				fmt.Printf("Carro %d está %s pela ponte\n", n, sentido)
+			if carro, ok := <-fila; ok {
+				fmt.Printf("Carro %d está %s pela ponte\n", carro, sentido)
 			} else {
 				break
 			}
@@ -31,10 +31,10 @@ func consumirCarros(sentido string, fila chan int, ponte *sync.Mutex) {
 
 func produzirCarros(sentido string, fila chan int) {
 	for {
-		n := rand.Intn(100)
-		fmt.Printf("Carro %d está %s\n", n, sentido)
-		fila <- n
-		time.Sleep(100 * time.Duration(n) * time.Millisecond)
+		carro := rand.Intn(100)
+		fmt.Printf("Carro %d está %s\n", carro, sentido)
+		fila <- carro
+		time.Sleep(100 * time.Duration(carro) * time.Millisecond)
 	}
 }
 
