@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package cat;
+
+service Cat {
+  rpc Reply(Package) returns (Package) {}
+}
+
+message Package {
+  string message = 1;
+}
