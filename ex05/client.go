@@ -10,7 +10,7 @@ func main() {
 	client := crh.CRH{
 		ServerHost: "localhost",
 		ServerPort: 8080,
-		Protocol:   "tcp",
+		Protocol:   "udp",
 		Timeout:    time.Duration(30 * time.Second)}
 
 	msg := []byte("hello")

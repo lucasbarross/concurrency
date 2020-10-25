@@ -2,7 +2,6 @@ package crh
 
 import (
 	"errors"
-	"log"
 	"net"
 	"strconv"
 	"time"
