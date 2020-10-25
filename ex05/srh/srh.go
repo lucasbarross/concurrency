@@ -2,9 +2,9 @@ package srh
 
 import (
 	"errors"
-	"io"
 	"log"
 	"net"
+	"bufio"
 	"strconv"
 )
 
@@ -30,25 +30,13 @@ func (srh SRH) Receive() (error, []byte) {
 		return err, nil
 	}
 
-	result := []byte{}
-	for {
-		buffer := make([]byte, 512)
-		log.Print("oi")
-		n, err := conn.Read(buffer)
-		log.Print(n)
-		if n == 0 || err == io.EOF {
-			break
-		} else if err != nil {
-			log.Fatal(err)
-		}
-		result = append(result, buffer...)
-	}
-
+	reader := bufio.NewReader(conn)
+	buf, err := reader.ReadBytes('\n')
 	if err != nil {
 		return err, nil
 	}
 
-	return nil, result
+	return nil, buf
 }
 
 func (srh SRH) Send(msgToClient []byte) error {

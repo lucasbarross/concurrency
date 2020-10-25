@@ -6,6 +6,7 @@ import (
 	"net"
 	"strconv"
 	"time"
+	"bufio"
 )
 
 type CRH struct {
@@ -18,6 +19,7 @@ type CRH struct {
 func (crh CRH) SendReceive(msgToServer []byte) (error, []byte) {
 	resultChan := make(chan []byte, 1)
 	errChan := make(chan error, 1)
+	msgToServer = append(msgToServer, "\n")
 
 	go func() {
 		conn, err := net.Dial(crh.Protocol, crh.ServerHost+":"+strconv.Itoa(crh.ServerPort))
@@ -28,29 +30,14 @@ func (crh CRH) SendReceive(msgToServer []byte) (error, []byte) {
 		defer conn.Close()
 		conn.Write(msgToServer)
 
-		// for {
-		// 	log.Print("Oi")
-		// 	n, err := conn.Read(buffer)
-		// 	log.Print(n)
-		// 	if n == 0 || err == io.EOF {
-		// 		break
-		// 	} else if err != nil {
-		// 		errChan <- err
-		// 		return
-		// 	}
-		// 	result = append(result, buffer...)
-		// }
-
-		buffer := make([]byte, 512)
-		log.Print("read")
-		_, err = conn.Read(buffer)
-		log.Print("done")
-
+		reader := bufio.NewReader(conn)
+		buf, err := reader.ReadBytes('\n')
 		if err != nil {
 			errChan <- err
 			return
 		}
-		resultChan <- buffer
+		
+		resultChan <- buf
 	}()
 
 	select {
