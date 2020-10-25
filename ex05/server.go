@@ -3,12 +3,22 @@ package main
 import (
 	"log"
 	"middleware/srh"
+	"os"
 )
 
 func main() {
-	server := srh.SRH{
-		Protocol:   "tcp",
-		ServerPort: 8080,
+	args := os.Args[1:]
+	protocol := args[0]
+
+	var server srh.SRH
+	if protocol == "tcp" {
+		server = srh.SRH_TCP{
+			ServerPort: 8080,
+		}
+	} else {
+		server = srh.SRH_UDP{
+			ServerPort: 8080,
+		}
 	}
 
 	for {
@@ -19,9 +29,7 @@ func main() {
 		msg := string(buff)
 		log.Print(msg)
 
-		log.Print("Send")
 		err = server.Send(buff)
-		log.Print("Log")
 		if err != nil {
 			log.Fatal(err)
 		}

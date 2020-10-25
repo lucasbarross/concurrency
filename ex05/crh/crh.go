@@ -2,7 +2,6 @@ package crh
 
 import (
 	"errors"
-	"log"
 	"net"
 	"strconv"
 	"time"
@@ -28,23 +27,8 @@ func (crh CRH) SendReceive(msgToServer []byte) (error, []byte) {
 		defer conn.Close()
 		conn.Write(msgToServer)
 
-		// for {
-		// 	log.Print("Oi")
-		// 	n, err := conn.Read(buffer)
-		// 	log.Print(n)
-		// 	if n == 0 || err == io.EOF {
-		// 		break
-		// 	} else if err != nil {
-		// 		errChan <- err
-		// 		return
-		// 	}
-		// 	result = append(result, buffer...)
-		// }
-
-		buffer := make([]byte, 512)
-		log.Print("read")
+		buffer := make([]byte, 1024)
 		_, err = conn.Read(buffer)
-		log.Print("done")
 
 		if err != nil {
 			errChan <- err
