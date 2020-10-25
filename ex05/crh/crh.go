@@ -18,7 +18,7 @@ type CRH struct {
 func (crh CRH) SendReceive(msgToServer []byte) (error, []byte) {
 	resultChan := make(chan []byte, 1)
 	errChan := make(chan error, 1)
-	msgToServer = append(msgToServer, "\n")
+	msgToServer = append(msgToServer, '\n')
 
 	go func() {
 		conn, err := net.Dial(crh.Protocol, crh.ServerHost+":"+strconv.Itoa(crh.ServerPort))

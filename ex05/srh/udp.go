@@ -19,13 +19,37 @@ func (srh SRH_UDP) Receive() (error, []byte) {
 		return err, nil
 	}
 
-	buff := make([]byte, 1024)
-	_, address, err = connUDP.ReadFrom(buff)
-	if err != nil {
-		return err, nil
+	result := []byte{}
+	for {
+		buff := make([]byte, 1024)
+		n, addr, err := connUDP.ReadFrom(buff)
+		address = addr
+		if err != nil {
+			return err, nil
+		}
+		
+		result = append(result, buff...)	
+		if (buff[n-1] == '\n') {
+			break
+		}
 	}
+	
+	result = removeEOFCharacter(result)
 
-	return nil, buff
+	return nil, result
+}
+
+func removeEOFCharacter(buffer []byte) []byte {
+	result := buffer
+	
+	for i := 0; i < len(result); i++ {
+		if (result[i] == '\n') {
+			result[i] = 0
+			return result
+		}
+	}
+	
+	return result
 }
 
 func (srh SRH_UDP) Send(msgToClient []byte) error {

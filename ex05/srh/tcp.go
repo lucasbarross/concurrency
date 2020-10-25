@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net"
 	"strconv"
+	"bufio"
 )
 
 type SRH_TCP struct {
@@ -26,9 +27,8 @@ func (srh SRH_TCP) Receive() (error, []byte) {
 		return err, nil
 	}
 
-	buffer := make([]byte, 1024)
-	_, err := conn.Read(buffer)
-
+	reader := bufio.NewReader(conn)
+	buffer, err := reader.ReadBytes('\n')
 	if err != nil {
 		return err, nil
 	}
@@ -43,5 +43,6 @@ func (srh SRH_TCP) Send(msgToClient []byte) error {
 
 	conn.Write(msgToClient)
 	conn.Close()
+
 	return nil
 }
