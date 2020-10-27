@@ -5,6 +5,7 @@ import (
 	"net"
 	"strconv"
 	"bufio"
+	"middleware/crh"
 )
 
 type SRH_TCP struct {
@@ -28,7 +29,7 @@ func (srh SRH_TCP) Receive() (error, []byte) {
 	}
 
 	reader := bufio.NewReader(conn)
-	buffer, err := reader.ReadBytes('\n')
+	buffer, err := reader.ReadBytes(crh.EOT_CHARACTER)
 	if err != nil {
 		return err, nil
 	}

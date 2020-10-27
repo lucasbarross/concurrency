@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net"
 	"strconv"
+	"middleware/crh"
 )
 
 type SRH_UDP struct {
@@ -29,27 +30,12 @@ func (srh SRH_UDP) Receive() (error, []byte) {
 		}
 		
 		result = append(result, buff...)	
-		if (buff[n-1] == '\n') {
+		if (buff[n-1] == crh.EOT_CHARACTER) {
 			break
 		}
 	}
-	
-	result = removeEOFCharacter(result)
 
 	return nil, result
-}
-
-func removeEOFCharacter(buffer []byte) []byte {
-	result := buffer
-	
-	for i := 0; i < len(result); i++ {
-		if (result[i] == '\n') {
-			result[i] = 0
-			return result
-		}
-	}
-	
-	return result
 }
 
 func (srh SRH_UDP) Send(msgToClient []byte) error {

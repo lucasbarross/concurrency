@@ -8,6 +8,10 @@ import (
 	"bufio"
 )
 
+const (
+	EOT_CHARACTER = '\n'
+)
+
 type CRH struct {
 	ServerHost string
 	ServerPort int
@@ -18,7 +22,7 @@ type CRH struct {
 func (crh CRH) SendReceive(msgToServer []byte) (error, []byte) {
 	resultChan := make(chan []byte, 1)
 	errChan := make(chan error, 1)
-	msgToServer = append(msgToServer, '\n')
+	msgToServer = append(msgToServer, EOT_CHARACTER)
 
 	go func() {
 		conn, err := net.Dial(crh.Protocol, crh.ServerHost+":"+strconv.Itoa(crh.ServerPort))
@@ -28,14 +32,13 @@ func (crh CRH) SendReceive(msgToServer []byte) (error, []byte) {
 		}
 		defer conn.Close()
 		conn.Write(msgToServer)
-
 		reader := bufio.NewReader(conn)
-		buf, err := reader.ReadBytes('\n')
+		buf, err := reader.ReadBytes(EOT_CHARACTER)
 		if err != nil {
 			errChan <- err
 			return
 		}
-		
+
 		resultChan <- buf
 	}()
 
