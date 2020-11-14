@@ -1,13 +1,15 @@
 package impl
 
-import {
+import (
 	"middleware/requestor"
-}
+)
 
-type struct CatProxy {
+type CatProxy struct {
 	Requestor requestor.Requestor
 }
 
-func (CatProxy cat) Echo(string message) {
-	cat.Requestor.Invoke("Cat", "Echo", [message])
+func (cat CatProxy) Echo(message string) {
+	parameters := []interface{}{message}
+
+	cat.Requestor.Invoke("Cat", "Echo", parameters)
 }

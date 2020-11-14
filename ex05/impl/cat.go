@@ -1,10 +1,8 @@
 package impl
 
-interface Cat {
-	Echo(string message) string
+type Cat interface  {
+	Echo(string) string
 }
-
-
-func Echo(string message) string {
+func Echo(message string) string {
 	return message
 }

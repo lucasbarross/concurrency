@@ -4,15 +4,17 @@ import (
 	"encoding/json"
 )
 
-interface Marshaller {
+type Marshaller interface  {
 	Marshal(interface{}) ([]byte, error)
 	Unmarshal(data []byte, v interface{}) error
 }
 
-func Marshal(data interface{}) ([]byte, error) {
+type JsonMarshaller struct {} 
+
+func (m JsonMarshaller) Marshal(data interface{}) ([]byte, error) {
 	return json.Marshal(data)
 }
 
-func Unmarshal(data []byte, v interface{}) error {
+func (m JsonMarshaller) Unmarshal(data []byte, v interface{}) error {
 	return json.Unmarshal(data, v)
 }

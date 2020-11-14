@@ -1,36 +1,36 @@
 package protocol
 
-type struct Packet {
+type Packet struct {
 	Req Request
 	Res Response
 }
 
-type struct Request {
+type Request struct {
 	ReqHeader RequestHeader
 	ReqBody RequestBody
 }
 
-type struct RequestHeader {
+type RequestHeader struct {
 	RequestId string
 	ResponseExpected bool
 	ObjectKey string
 	Operation string
 }
 
-type struct RequestBody {
+type RequestBody struct {
 	Body []interface{}
 }
 
-type struct Response {
+type Response struct {
 	ResHeader ResponseHeader
 	ResBody ResponseBody
 }
 
-type struct ResponseHeader {
-	RequestId int
+type ResponseHeader struct {
+	RequestId string
 	Status int
 }
 
-type struct ResponseBody {
+type ResponseBody struct {
 	OperationResult interface{}
 }

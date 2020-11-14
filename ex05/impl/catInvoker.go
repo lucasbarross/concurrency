@@ -7,13 +7,13 @@ import (
 	"middleware/protocol"
 )
 
-type struct CatInvoker {
+type CatInvoker struct {
 	SRH srh.SRH
 	Object Cat
 	Marshaller marshaller.Marshaller
 }
 
-func (CatInvoker invoker) Invoke() {
+func (invoker CatInvoker) Invoke() {
 	for {
 		err, requestBytes := invoker.SRH.Receive()
 		if err != nil {
@@ -21,31 +21,34 @@ func (CatInvoker invoker) Invoke() {
 		}
 
 		requestPacket := protocol.Packet{}
-		err := invoker.Marshaller.Unmarshal(requestBytes, requestPacket)
+		err = invoker.Marshaller.Unmarshal(requestBytes, requestPacket)
 		if err != nil {
 			log.Fatal("Error unmarhalling")
 		}
 
-		objectKey := requestPacket.ReqHeader.ObjectKey
+		objectKey := requestPacket.Req.ReqHeader.ObjectKey
 		if objectKey != "Cat" {
 			log.Fatal("Wrong object")
 		}
-		operation := requestPacket.ReqHeader.Operation
-		parameters := requestPacket.ReqBody.Body
+		operation := requestPacket.Req.ReqHeader.Operation
+		parameters := requestPacket.Req.ReqBody.Body
 
-		protocol.Response response
+		var response protocol.Response
 		switch operation {
 		case "Echo":
-			result := invoker.Object.Echo(parameters[0])
-
-			response = protocol.Response{
-				ResponseHeader{requestPacket.ReqHeader.RequestId, 200}
-				ResponseBody{result}
+			message, ok := parameters[0].(string)
+			if ok {
+				result := invoker.Object.Echo(message)
+	
+				response = protocol.Response{
+					protocol.ResponseHeader{requestPacket.Req.ReqHeader.RequestId, 200},
+					protocol.ResponseBody{result},
+				}
 			}
 		default:
 			response = protocol.Response{
-				ResponseHeader{requestPacket.ReqHeader.RequestId, 404}
-				ResponseBody{nil}
+				protocol.ResponseHeader{requestPacket.Req.ReqHeader.RequestId, 404},
+				protocol.ResponseBody{nil},
 			}
 		}
 		

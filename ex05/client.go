@@ -3,34 +3,21 @@ package main
 import (
 	"log"
 	"middleware/crh"
-	"os"
+	"middleware/requestor"
+	"middleware/marshaller"
+	"middleware/impl"
 	"time"
 )
 
 func main() {
-	args := os.Args[1:]
-	protocol := args[0]
+	crh := crh.CRH{
+		ServerHost: "localhost",
+		ServerPort: 8080,
+		Protocol:   "tcp",
+		Timeout:    time.Duration(30 * time.Second)}
 
-	var client crh.CRH
-	if protocol == "tcp" {
-		client = crh.CRH{
-			ServerHost: "localhost",
-			ServerPort: 8080,
-			Protocol:   "tcp",
-			Timeout:    time.Duration(30 * time.Second)}
-
-	} else {
-		client = crh.CRH{
-			ServerHost: "localhost",
-			ServerPort: 8080,
-			Protocol:   "udp",
-			Timeout:    time.Duration(30 * time.Second)}
+	requestor := requestor.Requestor{
+		Marshaller: marshaller
 	}
-
-	msg := []byte("hello")
-	err, res := client.SendReceive(msg)
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Print(string(res))
+	catProxy := impl.CatProxy{}
 }
