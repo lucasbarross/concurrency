@@ -3,6 +3,7 @@ package requestor
 import (
 	"middleware/marshaller"
 	"middleware/crh"
+	"middleware/protocol"
 )
 
 type struct Requestor {
@@ -22,7 +23,7 @@ func (requestor Requestor) Invoke(objectName string, methodName string, paramete
 		return nil, err
 	}
 
-	responsePacket := Packet{}
+	responsePacket := protocol.Packet{}
 	err := requestor.Marshaller.Unmarshal(responseBytes, responsePacket)
 	if err != nil {
 		return err
@@ -32,8 +33,8 @@ func (requestor Requestor) Invoke(objectName string, methodName string, paramete
 	return responsePacket.Res.ResponseBody.OperationResult
 }
 
-func createRequestPacket(objectName string, methodName string, parameters[]interface{}) {
-	return Packet{
+func createRequestPacket(objectName string, methodName string, parameters []interface{}) protocol.Packet {
+	return protocol.Packet{
 		Request{
 			RequestHeader{
 				"uuid",
