@@ -16,8 +16,18 @@ func main() {
 		Protocol:   "tcp",
 		Timeout:    time.Duration(30 * time.Second)}
 
+	marshaller := marshaller.JsonMarshaller{}
 	requestor := requestor.Requestor{
-		Marshaller: marshaller
+		Marshaller: marshaller,
+		CRH: crh,
 	}
-	catProxy := impl.CatProxy{}
+	catProxy := impl.CatProxy{
+		Requestor: requestor,
+	}
+
+	res, err := catProxy.Echo("hello")
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Print(res)
 }

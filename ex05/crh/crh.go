@@ -1,6 +1,7 @@
 package crh
 
 import (
+	"log"
 	"errors"
 	"net"
 	"strconv"
@@ -27,6 +28,7 @@ func (crh CRH) SendReceive(msgToServer []byte) (error, []byte) {
 	go func() {
 		conn, err := net.Dial(crh.Protocol, crh.ServerHost+":"+strconv.Itoa(crh.ServerPort))
 		if err != nil {
+			log.Println("Dial")
 			errChan <- err
 			return
 		}
@@ -35,6 +37,7 @@ func (crh CRH) SendReceive(msgToServer []byte) (error, []byte) {
 		reader := bufio.NewReader(conn)
 		buf, err := reader.ReadBytes(EOT_CHARACTER)
 		if err != nil {
+			log.Println("ReadBytes")
 			errChan <- err
 			return
 		}

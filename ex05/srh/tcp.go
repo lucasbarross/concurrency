@@ -42,7 +42,8 @@ func (srh SRH_TCP) Send(msgToClient []byte) error {
 		return errors.New("Connection not found")
 	}
 
-	conn.Write(msgToClient)
+	msgWithEOT := append(msgToClient, crh.EOT_CHARACTER)
+	conn.Write(msgWithEOT)
 	conn.Close()
 
 	return nil

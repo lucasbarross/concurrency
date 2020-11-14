@@ -16,13 +16,17 @@ type CatInvoker struct {
 func (invoker CatInvoker) Invoke() {
 	for {
 		err, requestBytes := invoker.SRH.Receive()
+		log.Println("Handling request ")
+		log.Println(string(requestBytes))
+
 		if err != nil {
 			log.Fatal("Error")
 		}
 
 		requestPacket := protocol.Packet{}
-		err = invoker.Marshaller.Unmarshal(requestBytes, requestPacket)
+		err = invoker.Marshaller.Unmarshal(requestBytes, &requestPacket)
 		if err != nil {
+			log.Println(err)
 			log.Fatal("Error unmarhalling")
 		}
 
@@ -58,6 +62,8 @@ func (invoker CatInvoker) Invoke() {
 			log.Fatal("Error marshaling")
 		}
 
+		log.Println("Responding request ")
+		log.Println(string(responseBytes))
 		invoker.SRH.Send(responseBytes)
 	}
 }
