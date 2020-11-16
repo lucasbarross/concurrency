@@ -2,14 +2,16 @@ package requestor
 
 import (
 	"log"
-	"middleware/marshaller"
 	"middleware/crh"
+	"middleware/marshaller"
 	"middleware/protocol"
+
+	"github.com/google/uuid"
 )
 
 type Requestor struct {
 	Marshaller marshaller.Marshaller
-	CRH crh.CRH
+	CRH        crh.CRH
 }
 
 func (requestor Requestor) Invoke(objectName string, methodName string, parameters []interface{}) (interface{}, error) {
@@ -43,7 +45,7 @@ func createRequestPacket(objectName string, methodName string, parameters []inte
 	return protocol.Packet{
 		protocol.Request{
 			protocol.RequestHeader{
-				"uuid",
+				uuid.New().String(),
 				true,
 				objectName,
 				methodName,
