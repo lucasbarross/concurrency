@@ -41,9 +41,16 @@ func (proxy NamingProxy) Lookup(name string) *clientproxy.ClientProxy {
 func (proxy NamingProxy) List() map[string]clientproxy.ClientProxy {
 	result, err := proxy.Requestor.Invoke("NamingService", "List", nil)
 
-	if err != nil {
+	resultMap, ok := result.(map[string]interface{})
+
+	if err != nil || !ok {
 		return nil
 	}
 
-	return result.(map[string]clientproxy.ClientProxy)
+	returnMap := make(map[string]clientproxy.ClientProxy)
+	for key, element := range resultMap {
+		returnMap[key] = clientproxy.FromMap(element.(map[string]interface{}))
+	}
+
+	return returnMap
 }
