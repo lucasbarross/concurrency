@@ -1,10 +1,12 @@
 package requestor
 
 import (
+	"errors"
 	"log"
 	"middleware/crh"
 	"middleware/marshaller"
 	"middleware/protocol"
+	"strconv"
 
 	"github.com/google/uuid"
 )
@@ -34,8 +36,16 @@ func (requestor Requestor) Invoke(objectName string, methodName string, paramete
 	if err != nil {
 		return nil, err
 	}
-	// checar request id é igual??
-	// checar status da resposta???
+
+	if responsePacket.Req.ReqHeader.RequestId != responsePacket.Res.ResHeader.RequestId {
+		return nil, errors.New("Unexpected requestId on response")
+	}
+
+	if responsePacket.Res.ResHeader.Status != 200 {
+		return nil, errors.New("Unexpected response status " +
+			strconv.Itoa(responsePacket.Res.ResHeader.Status))
+	}
+
 	log.Println(string(responseBytes))
 
 	return responsePacket.Res.ResBody.OperationResult, nil
