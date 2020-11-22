@@ -32,8 +32,8 @@ func (crh CRH) SendReceive(msgToServer []byte) (error, []byte) {
 			errChan <- err
 			return
 		}
-		defer conn.Close()
 		conn.Write(msgToServer)
+    log.Println(string(msgToServer))
 		reader := bufio.NewReader(conn)
 		buf, err := reader.ReadBytes(EOT_CHARACTER)
 		if err != nil {
@@ -41,6 +41,7 @@ func (crh CRH) SendReceive(msgToServer []byte) (error, []byte) {
 			errChan <- err
 			return
 		}
+		conn.Close()
 
 		resultChan <- buf
 	}()

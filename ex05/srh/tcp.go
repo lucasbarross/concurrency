@@ -1,11 +1,11 @@
 package srh
 
 import (
+	"bufio"
 	"errors"
+	"middleware/crh"
 	"net"
 	"strconv"
-	"bufio"
-	"middleware/crh"
 )
 
 type SRH_TCP struct {

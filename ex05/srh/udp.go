@@ -2,9 +2,9 @@ package srh
 
 import (
 	"errors"
+	"middleware/crh"
 	"net"
 	"strconv"
-	"middleware/crh"
 )
 
 type SRH_UDP struct {
@@ -28,12 +28,13 @@ func (srh SRH_UDP) Receive() (error, []byte) {
 		if err != nil {
 			return err, nil
 		}
-		
-		result = append(result, buff...)	
-		if (buff[n-1] == crh.EOT_CHARACTER) {
+
+		result = append(result, buff[:n]...)
+		if buff[n-1] == crh.EOT_CHARACTER {
 			break
 		}
 	}
+
 
 	return nil, result
 }
@@ -42,8 +43,11 @@ func (srh SRH_UDP) Send(msgToClient []byte) error {
 	if connUDP == nil {
 		return errors.New("connUDPection not found")
 	}
+	defer connUDP.Close()
 
+	if msgToClient[len(msgToClient)-1] != crh.EOT_CHARACTER {
+		msgToClient = append(msgToClient, crh.EOT_CHARACTER)
+	}
 	connUDP.WriteTo(msgToClient, address)
-	connUDP.Close()
 	return nil
 }

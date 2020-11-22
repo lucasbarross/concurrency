@@ -1,8 +1,8 @@
 package impl
 
 import (
-	"middleware/requestor"
 	"errors"
+	"middleware/requestor"
 )
 
 type CatProxy struct {

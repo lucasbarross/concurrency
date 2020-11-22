@@ -16,7 +16,7 @@ func main() {
 	crh := crh.CRH{
 		ServerHost: "localhost",
 		ServerPort: 8081,
-		Protocol:   "tcp",
+		Protocol:   "udp",
 		Timeout:    time.Duration(30 * time.Second)}
 
 	marshaller := marshaller.JsonMarshaller{}
@@ -32,7 +32,7 @@ func main() {
 	result := namingproxy.Register("Cat", catProxy)
 	log.Println(result)
 
-	srh := srh.SRH_TCP{
+	srh := srh.SRH_UDP{
 		ServerPort: 8080,
 	}
 	catInvoker := impl.CatInvoker{
@@ -49,7 +49,7 @@ func createClientProxy() clientproxy.ClientProxy {
 	crh := crh.CRH{
 		ServerHost: "localhost",
 		ServerPort: 8080,
-		Protocol:   "tcp",
+		Protocol:   "udp",
 		Timeout:    time.Duration(30 * time.Second)}
 
 	marshaller := marshaller.JsonMarshaller{}

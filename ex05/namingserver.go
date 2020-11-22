@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	srh := srh.SRH_TCP{
+	srh := srh.SRH_UDP{
 		ServerPort: 8081,
 	}
 	marshaller := marshaller.JsonMarshaller{}

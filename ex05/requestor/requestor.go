@@ -27,9 +27,9 @@ func (requestor Requestor) Invoke(objectName string, methodName string, paramete
 	err, responseBytes := requestor.CRH.SendReceive(requestBytes)
 	if err != nil {
 		log.Println("SendReceive")
+		log.Println(err)
 		return nil, err
 	}
-	log.Println(string(responseBytes))
 
 	responsePacket := protocol.Packet{}
 	err = requestor.Marshaller.Unmarshal(responseBytes, &responsePacket)
@@ -45,8 +45,6 @@ func (requestor Requestor) Invoke(objectName string, methodName string, paramete
 		return nil, errors.New("Unexpected response status " +
 			strconv.Itoa(responsePacket.Res.ResHeader.Status))
 	}
-
-	log.Println(string(responseBytes))
 
 	return responsePacket.Res.ResBody.OperationResult, nil
 }

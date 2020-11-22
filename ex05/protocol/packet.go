@@ -7,14 +7,14 @@ type Packet struct {
 
 type Request struct {
 	ReqHeader RequestHeader
-	ReqBody RequestBody
+	ReqBody   RequestBody
 }
 
 type RequestHeader struct {
-	RequestId string
+	RequestId        string
 	ResponseExpected bool
-	ObjectKey string
-	Operation string
+	ObjectKey        string
+	Operation        string
 }
 
 type RequestBody struct {
@@ -23,12 +23,12 @@ type RequestBody struct {
 
 type Response struct {
 	ResHeader ResponseHeader
-	ResBody ResponseBody
+	ResBody   ResponseBody
 }
 
 type ResponseHeader struct {
 	RequestId string
-	Status int
+	Status    int
 }
 
 type ResponseBody struct {

@@ -2,32 +2,29 @@ package impl
 
 import (
 	"log"
-	"middleware/srh"
 	"middleware/marshaller"
 	"middleware/protocol"
+	"middleware/srh"
 )
 
 type CatInvoker struct {
-	SRH srh.SRH
-	Object Cat
+	SRH        srh.SRH
+	Object     Cat
 	Marshaller marshaller.Marshaller
 }
 
 func (invoker CatInvoker) Invoke() {
 	for {
 		err, requestBytes := invoker.SRH.Receive()
-		log.Println("Handling request ")
-		log.Println(string(requestBytes))
 
 		if err != nil {
-			log.Fatal("Error")
+			log.Fatal(err)
 		}
 
 		requestPacket := protocol.Packet{}
 		err = invoker.Marshaller.Unmarshal(requestBytes, &requestPacket)
 		if err != nil {
-			log.Println(err)
-			log.Fatal("Error unmarhalling")
+			log.Fatal(err)
 		}
 
 		objectKey := requestPacket.Req.ReqHeader.ObjectKey
@@ -43,7 +40,7 @@ func (invoker CatInvoker) Invoke() {
 			message, ok := parameters[0].(string)
 			if ok {
 				result := invoker.Object.Echo(message)
-	
+
 				response = protocol.Response{
 					protocol.ResponseHeader{requestPacket.Req.ReqHeader.RequestId, 200},
 					protocol.ResponseBody{result},
@@ -55,15 +52,13 @@ func (invoker CatInvoker) Invoke() {
 				protocol.ResponseBody{nil},
 			}
 		}
-		
+
 		requestPacket.Res = response
 		responseBytes, err := invoker.Marshaller.Marshal(requestPacket)
 		if err != nil {
-			log.Fatal("Error marshaling")
+			log.Fatal(err)
 		}
 
-		log.Println("Responding request ")
-		log.Println(string(responseBytes))
 		invoker.SRH.Send(responseBytes)
 	}
 }

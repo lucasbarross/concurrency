@@ -1,8 +1,8 @@
 package invoker
 
 import (
-	"middleware/srh"
 	"middleware/marshaller"
+	"middleware/srh"
 )
 
 type Invoker interface {
