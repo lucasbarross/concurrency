@@ -29,7 +29,7 @@ func (requestor Requestor) Invoke(objectName string, methodName string, paramete
 		log.Println("SendReceive")
 		return nil, err
 	}
-	log.Println(string(responseBytes))
+	// log.Println(string(responseBytes))
 
 	responsePacket := protocol.Packet{}
 	err = requestor.Marshaller.Unmarshal(responseBytes, &responsePacket)
@@ -46,7 +46,7 @@ func (requestor Requestor) Invoke(objectName string, methodName string, paramete
 			strconv.Itoa(responsePacket.Res.ResHeader.Status))
 	}
 
-	log.Println(string(responseBytes))
+	// log.Println(string(responseBytes))
 
 	return responsePacket.Res.ResBody.OperationResult, nil
 }

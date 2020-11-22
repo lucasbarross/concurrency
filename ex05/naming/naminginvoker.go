@@ -17,8 +17,8 @@ type NamingInvoker struct {
 func (invoker NamingInvoker) Invoke() {
 	for {
 		err, requestBytes := invoker.SRH.Receive()
-		log.Println("Handling request ")
-		log.Println(string(requestBytes))
+		// log.Println("Handling request ")
+		// log.Println(string(requestBytes))
 
 		if err != nil {
 			log.Fatal("Error")
@@ -84,8 +84,8 @@ func (invoker NamingInvoker) Invoke() {
 			log.Fatal("Error marshaling")
 		}
 
-		log.Println("Responding request ")
-		log.Println(string(responseBytes))
+		// log.Println("Responding request ")
+		// log.Println(string(responseBytes))
 		invoker.SRH.Send(responseBytes)
 	}
 }
