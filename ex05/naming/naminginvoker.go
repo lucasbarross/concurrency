@@ -58,7 +58,7 @@ func (invoker NamingInvoker) Invoke() {
 			name, ok := parameters[0].(string)
 			if ok {
 				result := invoker.Object.Lookup(name)
-
+				log.Println(result)
 				response = protocol.Response{
 					protocol.ResponseHeader{requestPacket.Req.ReqHeader.RequestId, 200},
 					protocol.ResponseBody{result},

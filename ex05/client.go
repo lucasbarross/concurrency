@@ -14,7 +14,7 @@ func main() {
 	crh := crh.CRH{
 		ServerHost: "localhost",
 		ServerPort: 8081,
-		Protocol:   "tcp",
+		Protocol:   "udp",
 		Timeout:    time.Duration(30 * time.Second)}
 
 	marshaller := marshaller.JsonMarshaller{}

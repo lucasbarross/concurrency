@@ -29,7 +29,7 @@ func (srh SRH_UDP) Receive() (error, []byte) {
 			return err, nil
 		}
 		
-		result = append(result, buff...)	
+		result = append(result, buff[:n]...)	
 		if (buff[n-1] == crh.EOT_CHARACTER) {
 			break
 		}
@@ -41,6 +41,10 @@ func (srh SRH_UDP) Receive() (error, []byte) {
 func (srh SRH_UDP) Send(msgToClient []byte) error {
 	if connUDP == nil {
 		return errors.New("connUDPection not found")
+	}
+
+	if msgToClient[len(msgToClient)-1] != crh.EOT_CHARACTER{
+		msgToClient = append(msgToClient, crh.EOT_CHARACTER)
 	}
 
 	connUDP.WriteTo(msgToClient, address)
