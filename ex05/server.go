@@ -9,10 +9,18 @@ import (
 	"middleware/naming"
 	"middleware/requestor"
 	"middleware/srh"
+	"os"
+	"strconv"
 	"time"
 )
 
 func main() {
+	args := os.Args[1:]
+	poolSize, err := strconv.Atoi(args[0])
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	crh := crh.CRH{
 		ServerHost: "localhost",
 		ServerPort: 8081,
@@ -38,7 +46,7 @@ func main() {
 	catInvoker := impl.CatInvoker{
 		SRH:        srh,
 		Marshaller: marshaller,
-		Object:     impl.CatImpl{},
+		CatPool:    impl.NewCatPool(poolSize),
 	}
 
 	log.Println("Starting Cat service")

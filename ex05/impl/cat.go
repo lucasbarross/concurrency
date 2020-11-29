@@ -1,10 +1,12 @@
 package impl
 
-type Cat interface  {
+type Cat interface {
 	Echo(string) string
 }
 
-type CatImpl struct {}
+type CatImpl struct {
+	Id int
+}
 
 func (cat CatImpl) Echo(message string) string {
 	return message
